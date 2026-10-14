@@ -142,13 +142,26 @@ async function kernelProcessor(networkObjectId, packet, inputInterface) {
         if (!availableIps.includes(packet.destination_ip)) return;
         httpBuffer[networkObjectId] = packet;
         return;
-    }
+    }    if (packet.protocol === "dns" && packet.type === "reply") {
 
-    if (packet.protocol === "dns" && packet.type === "reply") {
         if (!availableIps.includes(packet.destination_ip)) return;
+
         dnsRequestFlag[networkObjectId] = true;
         buffer[networkObjectId] = packet;
+
         return;
+
+    }
+
+    if (packet.protocol === "kerberos" && packet.type === "reply") {
+
+        if (!availableIps.includes(packet.destination_ip)) return;
+
+        kerberosFlag[networkObjectId] = true; //<-- a Kerberos reply (AS-REP / TGS-REP / KRB-ERROR) reached this device
+        kerberosBuffer[networkObjectId] = packet;
+
+        return;
+
     }
 
 }

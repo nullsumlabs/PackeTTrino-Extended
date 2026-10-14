@@ -9,7 +9,7 @@
  * @param {string} networkObjectId - The DOM element ID of the network object to install/remove the package on.
  * @param {string} option - Action to perform: "install" or "remove".
  * @param {string} package - Package name. One of: "apache2", "bind9", "isc-dhcp-server",
- *   "isc-dhcp-relay", "isc-dhcp-client", "amin-search".
+ *   "isc-dhcp-relay", "isc-dhcp-client", "amin-search", "krb5-kdc".
  * @returns {void}
  * @throws {Error} If the package is unknown, already installed (on install), or not installed (on remove).
  */
@@ -17,7 +17,7 @@ function dpkg(networkObjectId, option, package) {
 
     const $networkObject = document.getElementById(networkObjectId);
 
-    const availablePackages = ["apache2", "bind9", "isc-dhcp-server", "isc-dhcp-relay", "isc-dhcp-client", "amin-search"];
+    const availablePackages = ["apache2", "bind9", "isc-dhcp-server", "isc-dhcp-relay", "isc-dhcp-client", "amin-search", "krb5-kdc"];
 
     const packagesToServices = {
         "apache2": "apache2",
@@ -26,6 +26,7 @@ function dpkg(networkObjectId, option, package) {
         "isc-dhcp-relay": "dhcrelay",
         "isc-dhcp-client": "dhclient",
         "amin-search": "browser",
+        "krb5-kdc": "kdc",
     }
 
     if (!availablePackages.includes(package)) throw new Error(`Error: Unable to locate package ${package}.`);
@@ -53,6 +54,7 @@ function dpkg(networkObjectId, option, package) {
             "isc-dhcp-relay": () => installDhcprelay($networkObject),
             "isc-dhcp-client": () => installDhclient($networkObject),
             "amin-search": () => installBrowser($networkObject),
+            "krb5-kdc": () => installKrb5Kdc($networkObject),
         }
 
         installFunctions[package]();
@@ -74,6 +76,7 @@ function dpkg(networkObjectId, option, package) {
             "isc-dhcp-relay": () => uninstallDhcprelay(networkObjectId),
             "isc-dhcp-client": () => uninstallDhclient(networkObjectId),
             "amin-search": () => uninstallBrowser(networkObjectId),
+            "krb5-kdc": () => uninstallKrb5Kdc(networkObjectId),
         }
 
         uninstallFunctions[package]();

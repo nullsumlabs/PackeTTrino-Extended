@@ -106,6 +106,22 @@ async function serviceProcessor(networkObjectId, packet, networkObjectInterface)
 
     }
 
+    //Kerberos service (KDC)
+    if (packet.protocol === "kerberos" && packet.type === "request" && availableServices.includes("kdc")) {
+
+        const replyPacket = await kdc_service(networkObjectId, packet);
+
+        if (replyPacket) {
+
+            responses.push({
+                packet: replyPacket,
+                outInterface: ""
+            });
+
+        }
+
+    }
+
     return responses.filter(Boolean);
 
 }

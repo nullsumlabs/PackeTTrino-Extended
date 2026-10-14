@@ -73,6 +73,12 @@ let tcpSyncFlag = {};
 /** @type {Record<string, boolean>} Tracks active traceroute probes keyed by a composite lookup key. */
 let traceFlag = {};
 
+/** @type {Record<string, boolean>} Flag set when a Kerberos reply reaches a device, keyed by device ID. */
+let kerberosFlag = {};
+
+/** @type {Record<string, Object>} Pending Kerberos reply payloads (AS-REP / TGS-REP / KRB-ERROR) keyed by device ID. */
+let kerberosBuffer = {};
+
 /** @type {boolean} When true, a quick-ping session is running without opening the full terminal. */
 let quickPingToggle = false;
 
