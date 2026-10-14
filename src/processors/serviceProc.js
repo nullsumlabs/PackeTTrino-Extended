@@ -122,6 +122,22 @@ async function serviceProcessor(networkObjectId, packet, networkObjectInterface)
 
     }
 
+    //Nginx web service (supports the Kerberos AP-REQ gate for protected pages)
+    if (packet.protocol === "http" && packet.type === "request" && availableServices.includes("nginx")) {
+
+        const replyPacket = await nginx_service(networkObjectId, packet);
+
+        if (replyPacket) {
+
+            responses.push({
+                packet: replyPacket,
+                outInterface: ""
+            });
+
+        }
+
+    }
+
     return responses.filter(Boolean);
 
 }

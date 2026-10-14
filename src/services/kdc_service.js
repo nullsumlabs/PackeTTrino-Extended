@@ -181,7 +181,8 @@ async function handleKerberosTgsRequest(networkObjectId, packet, networkObjectIp
         "sname": packet.sname,
         "session_key": sessionKey,
         "issued": Math.floor(Date.now() / 1000),
-        "expiry": Math.floor(Date.now() / 1000) + 3600
+        "expiry": Math.floor(Date.now() / 1000) + 3600,
+        "caddr": packet.origin_ip //<-- the requesting client's network address, validated by the service server (AP exchange)
     }
 
     const replyPacket = new TgsRep(

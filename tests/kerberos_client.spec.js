@@ -189,7 +189,7 @@ describe('Kerberos client (kerberos_util.js)', () => {
 
             expect(apRequest.authenticatorCipher.startsWith('KRBM1:')).toBe(true);
             const authenticator = krb.kerberosDeserialize(krb.mockKerberosDecrypt(apRequest.authenticatorCipher, stEntry.session_key));
-            expect(authenticator.cname).toBe('alice@PACKETTRINO.EDU');
+            expect(authenticator.cname).toBe('alice'); //<-- RFC 4120: the authenticator cname is local to the realm, matching the ticket
             expect(authenticator.sname).toBe('HTTP/webserver@PACKETTRINO.EDU');
         });
 

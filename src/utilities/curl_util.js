@@ -76,6 +76,10 @@ async function command_curl(networkObjectId, args) {
 
             message += `Body:\n ${httpReply.body}`;
 
+            if (httpReply.statusCode === 401 && httpReply.challenge) { //<-- Nginx Kerberos challenge
+                message += `\n\ncurl: this server requires Kerberos authentication. Get a ticket with <b>kinit &lt;principal&gt;</b> and retry — the client will present an AP-REQ automatically.`;
+            }
+
             terminalMessage(message, networkObjectId, false);
 
         } catch (error) {

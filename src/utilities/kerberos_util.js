@@ -353,7 +353,7 @@ function packageKerberosApReq(networkObjectId, serviceTicketEntry, webServerIp, 
 
     const authenticatorPayload = {
         "version": 1,
-        "cname": serviceTicketEntry.principal,
+        "cname": (serviceTicketEntry.principal || "").split("@")[0], //<-- RFC 4120: the cname is local to the realm, matching the KDC-minted ticket
         "sname": serviceTicketEntry.spn,
         "timestamp": nowEpoch
     }

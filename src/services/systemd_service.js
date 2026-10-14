@@ -6,7 +6,7 @@
  *
  * @param {string} networkObjectId - The DOM element ID of the network object whose service is managed.
  * @param {string} service - Service name. One of: "dhcpd", "apache2", "dhclient", "dhcrelay",
- *   "resolved", "named", "kdc".
+ *   "resolved", "named", "kdc", "nginx".
  * @param {string} option - Action to perform: "start", "restart", "stop", or "status".
  * @returns {void}
  * @throws {Error} If the service name is unknown or the service is not installed on the device.
@@ -14,7 +14,7 @@
 function systemd(networkObjectId, service, option) {
 
     const $networkObject = document.getElementById(networkObjectId);
-    const currentServices = ["dhcpd", "apache2", "dhclient", "dhcrelay", "resolved", "named", "kdc"];
+    const currentServices = ["dhcpd", "apache2", "dhclient", "dhcrelay", "resolved", "named", "kdc", "nginx"];
     const isServiceInstalled = $networkObject.getAttribute(service) !== null;
 
     if (!currentServices.includes(service)) throw new Error(`Error: Service "${service}" unknown.`);
@@ -67,6 +67,7 @@ function listallServices(networkObjectId) {
         "resolved": "",
         "named": "",
         "kdc": "MIT Kerberos KDC",
+        "nginx": "Nginx HTTP Server",
     };
 
     for (const service in availableServices) {
@@ -94,7 +95,7 @@ function listallServices(networkObjectId) {
 function getAvailableServices(networkObjectId) {
 
     const $networkObject = document.getElementById(networkObjectId);
-    const availableServices = ["dhcpd", "apache2", "dhclient", "dhcrelay", "resolved", "named", "kdc"];
+    const availableServices = ["dhcpd", "apache2", "dhclient", "dhcrelay", "resolved", "named", "kdc", "nginx"];
     const response = [];
 
     availableServices.forEach(service => {
@@ -159,6 +160,10 @@ function startService(networkObjectId, service) {
         "kdc": () => {
             $networkObject.setAttribute("kdc", "true");
             seedKerberosDatabase($networkObject.getAttribute("krb5-realm") || $KRB5DEFAULTREALM);
+        },
+
+        "nginx": () => {
+            $networkObject.setAttribute("nginx", "true");
         },
 
     }
