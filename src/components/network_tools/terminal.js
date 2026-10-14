@@ -192,6 +192,46 @@ function showTerminal(event) {
 }
 
 /**
+ * Opens the client terminal bound to a specific network object when its icon is clicked
+ * (the client PC left-click flow). Behaves like `showTerminal` minus the event plumbing,
+ * clears any previous output, and prints the welcome banner instructing the user to
+ * type `help` (which lists the commands, including the Kerberos tools). Falls back to
+ * the quick-ping flow when a quick ping is in progress.
+ *
+ * @param {string} networkObjectId - The DOM element ID of the device to bind the terminal to.
+ * @returns {void}
+ */
+function showClientTerminal(networkObjectId) {
+
+    if (quickPingToggle) {
+        quickPing(networkObjectId);
+        return;
+    }
+
+    const $networkObject = document.getElementById(networkObjectId);
+    const $terminal = document.querySelector(".terminal-component");
+
+    if (!$networkObject || !$terminal) return;
+
+    $terminal.setAttribute("data-id", networkObjectId);
+    $terminal.querySelector("#terminal-prompt").innerHTML = `root@${networkObjectId}:/#`;
+    $terminal.querySelector(".terminal-output").innerHTML = "";
+    $terminal.style.display = "block";
+    $terminal.querySelector(".terminal-input").focus();
+
+    const $advOptsModal = $networkObject.querySelector(".advanced-options-modal");
+    if ($advOptsModal) $advOptsModal.style.display = "none";
+
+    terminalMessage(
+        `<b>PackeTTrino client terminal</b> (${networkObjectId})\n` +
+        "Welcome! Type <b>help</b> to list the available commands.\n" +
+        "Kerberos SSO: <b>kinit &lt;principal&gt;</b>, <b>klist</b>, <b>kdestroy</b> — pages fetched with curl present an automatic AP-REQ once authenticated.",
+        networkObjectId
+    );
+
+}
+
+/**
  * Closes the terminal modal and fully resets its state: cancels any active ping
  * interval, clears the command history buffer and index, wipes the output area,
  * resets the prompt to `root@debian:/#`, resets the current working directory

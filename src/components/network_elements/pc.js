@@ -59,13 +59,16 @@ function PcObject(x, y) {
     //add the resolver
     attr("resolved", "true");
 
+    //add the kerberos client ticket cache (the client node's persistent memory instance)
+    attr("ticket-cache", "[]");
+
     //install packages
     installDhclient($networkObject);
     installIptables($networkObject);
     installBrowser($networkObject);
 
-    //add events
-    attr("onclick", "showPcMenu('" + $networkObject.id + "')");
+    //add events (left-click opens the client terminal; configuration lives in the pc-form menu opener)
+    attr("onclick", "showClientTerminal('" + $networkObject.id + "')");
     attr("oncontextmenu", "showAdvancedOptions(event)");
     attr("ondragstart", "BoardItemDragStart(event)");
 
