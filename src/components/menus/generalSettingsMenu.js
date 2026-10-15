@@ -6,8 +6,11 @@
  * - **Visual Mode** (`#visual-toggle`) — checkbox; change sets `visualToggle`.
  * - **Hide ARP Traffic** (`#ignore-arp-traffic`) — checkbox; change sets
  *   `ignoreArpTraffic`.
- * - **ARP TTL** (`#arp-ttl`) — range slider (120–600 s); input sets `$ARPENTRYTTL`
+ * - **ARP TTL** (`#arp-ttl`) — range slider (120–600 s); input sets `$ARPEntryTTL`
  *   and updates the `#arp-ttl-value` label.
+ * - **Terminal Font Size** (`#terminal-font-size`) — range slider (12–28 px);
+ *   input sets `$TERMINALFONTSIZE`, the `--terminal-font-size` CSS variable and
+ *   the `#terminal-font-size-value` label.
  * - **Tutorial** (`#start-tutorial`) — button; click calls `startTutorial`.
  *
  * The close button and draggable title bar are also wired up.
@@ -46,6 +49,12 @@ function GeneralOptions() {
         </div>
 
         <div class="options-group">
+            <label for="terminal-font-size"> Terminal Font Size </label>
+            <input type="range" class="btn-input" id="terminal-font-size" name="terminal-font-size" min="12" max="28" value="20">
+            <span id="terminal-font-size-value">20px</span>
+        </div>
+
+        <div class="options-group">
             <label for="start-tutorial"> Tutorial </label>
             <button class="btn-modern-blue" id="start-tutorial">Start</button>
         </div>
@@ -81,8 +90,22 @@ function GeneralOptions() {
      * @returns {void}
      */
     $generalOptions.querySelector("#arp-ttl").addEventListener("input", function () {
-        $ARPENTRYTTL= this.value;
+        $ARPENTRYTTL = this.value;
         $generalOptions.querySelector("#arp-ttl-value").innerHTML = `${this.value}s`;
+    });
+
+    /**
+     * Updates the global `$TERMINALFONTSIZE`, the `--terminal-font-size` CSS
+     * variable and the displayed value label when the terminal font size
+     * slider changes.
+     *
+     * @this {HTMLInputElement}
+     * @returns {void}
+     */
+    $generalOptions.querySelector("#terminal-font-size").addEventListener("input", function () {
+        $TERMINALFONTSIZE = Number(this.value);
+        document.documentElement.style.setProperty("--terminal-font-size", `${this.value}px`);
+        $generalOptions.querySelector("#terminal-font-size-value").innerHTML = `${this.value}px`;
     });
 
     $generalOptions.querySelector("#start-tutorial").addEventListener("click", function (event) {
@@ -113,5 +136,7 @@ function generalOptionsHandler(event) {
     $generalOptions.querySelector("#visual-toggle").checked = visualToggle;
     $generalOptions.querySelector("#ignore-arp-traffic").checked = ignoreArpTraffic;
     $generalOptions.querySelector("#dark-mode").checked = darkMode;
+    $generalOptions.querySelector("#terminal-font-size").value = $TERMINALFONTSIZE;
+    $generalOptions.querySelector("#terminal-font-size-value").innerHTML = `${$TERMINALFONTSIZE}px`;
     (isVisible) ? $generalOptions.style.display = "none" : $generalOptions.style.display = "flex";
 }

@@ -46,6 +46,9 @@ let servers = {};
 /** @type {number} Default time-to-live in seconds for ARP cache entries. */
 let $ARPENTRYTTL = 120;
 
+/** @type {number} Terminal font size in pixels for the `.terminal-component` output and input. */
+let $TERMINALFONTSIZE = 20;
+
 /** @type {number} Default time-to-live in seconds for MAC address table entries. */
 let $MACENTRYTTL = 120;
 
