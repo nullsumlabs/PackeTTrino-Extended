@@ -62,6 +62,12 @@ async function http(networkObjectId, headers) {
 
     delete httpBuffer[networkObjectId]; //<-- clear the previous response buffer
 
+    //negotiate an AP-REQ when the client is authenticated to a Kerberos realm (graceful: proceeds plain otherwise)
+
+    const kerberosApReq = (isLocalIp(networkObjectId, headers["address"])) ? null : await negotiateKerberosApReq(networkObjectId, headers["host"], headers["address"]);
+
+    if (kerberosApReq) headers["kerberosApReq"] = serializeKerberosPacket(kerberosApReq); //<-- will ride on the HTTP request packet for Phase 3
+
     //initiate the TCP handshake
 
     await tcpSynPacketGenerator(networkObjectId, headers["address"], headers["sport"], headers["dport"]);
@@ -117,6 +123,8 @@ async function httpRequestPacketGenerator(networkObjectId, headers) {
         headers["host"], //host
         headers["resource"] //resource
     );
+
+    if (headers["kerberosApReq"]) packet["kerberosApReq"] = headers["kerberosApReq"]; //<-- attach the SSO AP-REQ blob for the Kerberos-aware server (Phase 3)
 
     await routing(networkObjectId, packet, true);
 
