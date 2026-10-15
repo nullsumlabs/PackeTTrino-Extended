@@ -95,7 +95,7 @@ function manual_ip(){
     message += '    - Invalid CIDR format in addresses\n';
     message += '\n';
     message += 'AUTHOR\n';
-    message += '    Network simulator developed by Amin Pérez (2025).\n';
+    message += '    Network simulator developed by Amin Pérez (2025), extended by Nullsum Labs (2026).\n';
     return message;
 }
 
@@ -116,7 +116,7 @@ function manual_nano(){
     message += '        Relative or absolute path of the file to open (e.g. /etc/config.txt).\n';
     message += '\n';
     message += 'AUTHOR\n';
-    message += '    Network simulator developed by Amin Pérez (2025).\n';
+    message += '    Network simulator developed by Amin Pérez (2025), extended by Nullsum Labs (2026).\n';
 
     return message;
 }
@@ -164,7 +164,7 @@ function manual_apt() {
     message += '    isc-dhcp-client   -> dhclient\n';
     message += '\n';
     message += 'AUTHOR\n';
-    message += '    Network simulator developed by Amin Pérez (2025).\n';
+    message += '    Network simulator developed by Amin Pérez (2025), extended by Nullsum Labs (2026).\n';
 
 
     return message;
@@ -200,7 +200,7 @@ function manual_arp() {
     message += '        Removes all ARP entries (long form).\n';
     message += '\n';
     message += 'AUTHOR\n';
-    message += '    Network simulator developed by Amin Pérez (2025).\n';
+    message += '    Network simulator developed by Amin Pérez (2025), extended by Nullsum Labs (2026).\n';
     return message;
 }
 
@@ -249,7 +249,7 @@ function manual_dig() {
     message += '    - Domain names may optionally end with a dot (.)\n';
     message += '\n';
     message += 'AUTHOR\n';
-    message += '    Network simulator developed by Amin Pérez (2025).\n';
+    message += '    Network simulator developed by Amin Pérez (2025), extended by Nullsum Labs (2026).\n';
     return message;
 }
 
@@ -298,7 +298,7 @@ function manual_dns() {
     message += '        Clears all records from the DNS table.\n';
     message += '\n';
     message += 'AUTHOR\n';
-    message += '    Network simulator developed by Amin Pérez (2025).\n';
+    message += '    Network simulator developed by Amin Pérez (2025), extended by Nullsum Labs (2026).\n';
     return message;
 }
 
@@ -751,7 +751,7 @@ function manual_curl(){
     message += '        (e.g. http://192.168.1.1:80/index.html).\n';
     message += '\n';
     message += 'AUTHOR\n';
-    message += '    Network simulator developed by Amin Pérez (2025).\n';
+    message += '    Network simulator developed by Amin Pérez (2025), extended by Nullsum Labs (2026).\n';
 
     return message;
 }
@@ -775,7 +775,7 @@ function manual_realnode(){
     message += '        If the property does not exist, "No value found" will be shown.\n';
     message += '\n';
     message += 'AUTHOR\n';
-    message += '    Network simulator developed by Amin Pérez (2025).\n';
+    message += '    Network simulator developed by Amin Pérez (2025), extended by Nullsum Labs (2026).\n';
 
     return message;
 }
@@ -804,7 +804,7 @@ function manual_cp(){
     message += '    informational message will be shown in the network object\'s terminal.\n';
     message += '\n';
     message += 'AUTHOR\n';
-    message += '    Network simulator developed by Amin Pérez (2025).\n';
+    message += '    Network simulator developed by Amin Pérez (2025), extended by Nullsum Labs (2026).\n';
 
     return message;
 }
@@ -836,7 +836,7 @@ function manual_iface() {
     message += '    - Removing an interface that does not exist or is connected.\n';
     message += '\n';
     message += 'AUTHOR\n';
-    message += '    Network simulator developed by Amin Pérez (2025).\n';
+    message += '    Network simulator developed by Amin Pérez (2025), extended by Nullsum Labs (2026).\n';
 
     return message;
 }
