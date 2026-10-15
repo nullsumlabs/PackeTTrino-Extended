@@ -3,6 +3,18 @@
  * `filesystem` attribute of a network object DOM element. Supports standard operations such as
  * ls, touch, cp, rm, rmdir, mkdir, cd, read, and write.
  */
+/**
+ * @description Realm-agnostic "is a directory value" check. The classic `value instanceof Object`
+ * breaks when a FileSystem is built in a different JavaScript realm (vm test harnesses, iframes):
+ * objects minted in one realm fail `instanceof` against the other realm's `Object` constructor.
+ * A structural typeof check accepts objects from any realm while rejecting primitives and null.
+ * @param {*} value - The stored filesystem entry (string file content, nested directory object, array, ...).
+ * @returns {boolean} `true` when the value behaves as a directory (a non-null object, arrays included).
+ */
+function isDirectoryValue(value) {
+    return (value != null) && (typeof value === "object");
+}
+
 class FileSystem {
 
     /**
@@ -75,7 +87,7 @@ class FileSystem {
 
         function recursiveSearch(objt, currentPath) {
             for (const key in objt) {
-                if (objt[key] instanceof Object) {
+                if (isDirectoryValue(objt[key])) {
                     output.push(dirpermissions + owner + group + (currentPath + "/" + key).slice(1));
                     if (isRecursive) recursiveSearch(objt[key], currentPath + "/" + key);
                 } else {
@@ -106,7 +118,7 @@ class FileSystem {
 
         for (let i = 0; i < directoryPath.length; i++) {
             if (!currentDirectory[directoryPath[i]]) throw new Error(`Directory ${directoryPath[i]} does not exist`);
-            if (!(currentDirectory[directoryPath[i]] instanceof Object)) throw new Error(`${directoryPath[i]} is not a directory`);
+            if (!isDirectoryValue(currentDirectory[directoryPath[i]])) throw new Error(`${directoryPath[i]} is not a directory`);
             currentDirectory = currentDirectory[directoryPath[i]];
         }
 
@@ -176,7 +188,7 @@ class FileSystem {
 
         for (let i = 0; i < directoryPath.length; i++) {
             if (!currentDirectory[directoryPath[i]]) throw new Error(`Directory ${directoryPath[i]} does not exist`);
-            if (!(currentDirectory[directoryPath[i]] instanceof Object)) throw new Error(`${directoryPath[i]} is not a directory`);
+            if (!isDirectoryValue(currentDirectory[directoryPath[i]])) throw new Error(`${directoryPath[i]} is not a directory`);
             currentDirectory = currentDirectory[directoryPath[i]];
         }
 
@@ -199,7 +211,7 @@ class FileSystem {
 
         for (let i = 0; i < directoryPath.length; i++) {
             if (!Object.hasOwn(currentDirectory, directoryPath[i])) throw new Error(`Directory ${directoryPath[i]} does not exist`);
-            if (!(currentDirectory[directoryPath[i]] instanceof Object)) throw new Error(`${directoryPath[i]} is not a directory`);
+            if (!isDirectoryValue(currentDirectory[directoryPath[i]])) throw new Error(`${directoryPath[i]} is not a directory`);
             currentDirectory = currentDirectory[directoryPath[i]];
         }
 
@@ -224,7 +236,7 @@ class FileSystem {
         for (let i = 0; i < directoryPath.length; i++) {
             if (!Object.hasOwn(currentDirectory, directoryPath[i])) {
                 currentDirectory[directoryPath[i]] = {};
-            } else if (!(currentDirectory[directoryPath[i]] instanceof Object)) {
+            } else if (!isDirectoryValue(currentDirectory[directoryPath[i]])) {
                 throw new Error(`${directoryPath[i]} is not a directory`);
             }
             currentDirectory = currentDirectory[directoryPath[i]];
@@ -251,7 +263,7 @@ class FileSystem {
         directoryPath.forEach(dir => {
             if (!dir) return;
             if (!Object.hasOwn(currentDirectory, dir)) throw new Error(`Directory ${dir} does not exist`);
-            if (!(currentDirectory[dir] instanceof Object)) throw new Error(`${dir} is not a directory`);
+            if (!isDirectoryValue(currentDirectory[dir])) throw new Error(`${dir} is not a directory`);
             currentDirectory = currentDirectory[dir];
             provisionalPWD.push(dir);
         });
@@ -273,12 +285,12 @@ class FileSystem {
 
         for (let i = 0; i < directoryPath.length; i++) {
             if (!currentDirectory[directoryPath[i]]) throw new Error(`Directory ${directoryPath[i]} does not exist`);
-            if (!(currentDirectory[directoryPath[i]] instanceof Object)) throw new Error(`${directoryPath[i]} is not a directory`);
+            if (!isDirectoryValue(currentDirectory[directoryPath[i]])) throw new Error(`${directoryPath[i]} is not a directory`);
             currentDirectory = currentDirectory[directoryPath[i]];
         }
 
         if (!Object.hasOwn(currentDirectory, fileName)) throw new Error(`File ${fileName} does not exist`);
-        if (currentDirectory[fileName] instanceof Object) throw new Error(`Cannot open ${fileName}: it is a directory`);
+        if (isDirectoryValue(currentDirectory[fileName])) throw new Error(`Cannot open ${fileName}: it is a directory`);
 
         return currentDirectory[fileName];
 
@@ -298,12 +310,12 @@ class FileSystem {
 
         for (let i = 0; i < directoryPath.length; i++) {
             if (!currentDirectory[directoryPath[i]]) throw new Error(`Directory ${directoryPath[i]} does not exist`);
-            if (!(currentDirectory[directoryPath[i]] instanceof Object)) throw new Error(`${directoryPath[i]} is not a directory`);
+            if (!isDirectoryValue(currentDirectory[directoryPath[i]])) throw new Error(`${directoryPath[i]} is not a directory`);
             currentDirectory = currentDirectory[directoryPath[i]];
         }
 
         if (!Object.hasOwn(currentDirectory, fileName)) throw new Error(`File ${fileName} does not exist`);
-        if (currentDirectory[fileName] instanceof Object) throw new Error(`Cannot write to ${fileName}: it is a directory`);
+        if (isDirectoryValue(currentDirectory[fileName])) throw new Error(`Cannot write to ${fileName}: it is a directory`);
 
         currentDirectory[fileName] = content;
 
@@ -323,12 +335,12 @@ class FileSystem {
 
         for (let i = 0; i < directoryPath.length; i++) {
             if (!currentDirectory[directoryPath[i]]) return false;
-            if (!(currentDirectory[directoryPath[i]] instanceof Object)) return false;
+            if (!isDirectoryValue(currentDirectory[directoryPath[i]])) return false;
             currentDirectory = currentDirectory[directoryPath[i]];
         }
 
         if (!Object.hasOwn(currentDirectory, fileName)) return false;
-        if (!(currentDirectory[fileName] instanceof Object)) return false;
+        if (!isDirectoryValue(currentDirectory[fileName])) return false;
 
         return true;
 
@@ -346,12 +358,12 @@ class FileSystem {
 
         for (let i = 0; i < directoryPath.length; i++) {
             if (!currentDirectory[directoryPath[i]]) return false;
-            if (!(currentDirectory[directoryPath[i]] instanceof Object)) return false;
+            if (!isDirectoryValue(currentDirectory[directoryPath[i]])) return false;
             currentDirectory = currentDirectory[directoryPath[i]];
         }
 
         if (!Object.hasOwn(currentDirectory, fileName)) return false;
-        if (currentDirectory[fileName] instanceof Object) return false;
+        if (isDirectoryValue(currentDirectory[fileName])) return false;
 
         return true;
 

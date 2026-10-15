@@ -18,6 +18,7 @@ async function itemPanel() {
     $panel.innerHTML = `<input type="file" id="fileInput" accept=".ptt" style="display: none;">`;
     $itemsContainer.classList.add("item-panel-elements");
     $itemsContainer.appendChild(dynamicRoutingButton());
+    $itemsContainer.appendChild(autogenButton());
     $panel.appendChild($itemsContainer);
 
     const panelItems = [
@@ -164,6 +165,7 @@ async function itemPanel() {
     $panel.querySelector("#fileInput").addEventListener("change", fileInputChangeHandler);
     $panel.querySelector(".ping").addEventListener("click", quickPingStart);
     $panel.querySelector(".dynrouting").addEventListener("click", () => bodyComponent.render(DynamicRoutingMenu()));
+    $panel.querySelector(".autogen").addEventListener("click", toggleAutogenMenu);
     $panel.querySelector(".settings").addEventListener("click", generalOptionsHandler);
     $panel.querySelector(".traffic").addEventListener("click", showPacketTraffic);
     $panel.querySelector(".upload").addEventListener("click", () => $panel.querySelector("#fileInput").click());
