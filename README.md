@@ -13,12 +13,14 @@ Developed by Amín Pérez | May 2025
 ## Key Features
 
 - **Complete Network Simulation**: Design custom topologies with various network devices  
-- **Implemented Protocols**: DHCP, DNS, TCP/IP, ICMP, ARP, and more  
+- **Implemented Protocols**: DHCP, DNS, TCP/IP, ICMP, ARP, Kerberos (AS/TGS/AP exchanges), and more  
 - **Dynamic Routing**: Real-time simulation of routing protocols  
 - **Packet Visualization**: Track packet flow through the network visually  
 - **Integrated Tools**: Linux-style terminal, web browser, and packet analyzer  
 - **Configurable Firewall**: Create and apply firewall rules with live feedback  
 - **Intuitive Interface**: Control panel for managing devices and services  
+
+See [docs/KERBEROS.md](docs/KERBEROS.md) for a quick guide to the Kerberos simulation.
 
 ## Available Network Components
 
@@ -28,7 +30,8 @@ Developed by Amín Pérez | May 2025
 - DHCP servers  
 - DHCP relay agents  
 - DNS servers  
-- Web servers (Apache2)  
+- Web servers (Apache2, Nginx with Kerberos gate)  
+- Kerberos KDC servers (port 88)
 
 ## System Requirements
 
